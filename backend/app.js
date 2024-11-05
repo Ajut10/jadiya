@@ -1,11 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+
 const mongoose = require("mongoose");
 
+//Routers
 const productsRouter = require("./routers/products");
+const usersRouter = require("./routers/users");
+const categoryRouter = require("./routers/categories");
+
 // middleware
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
@@ -25,3 +31,5 @@ mongoose
   });
 
 app.use(`${api}/products`, productsRouter);
+app.use(`${api}/users`, usersRouter);
+app.use(`${api}/category`, categoryRouter);
