@@ -123,6 +123,9 @@ const loginUser = async(req,res)=>{
     }
 }
 
+const testUser = (req,res)=>{
+  res.send({msg:"protected test"})
+}
 const updateUser = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -150,6 +153,7 @@ module.exports = {
   getUser,
   registerUser,
   loginUser,
+  testUser,
   updateUser,
   deleteUser,
 };
