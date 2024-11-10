@@ -1,3 +1,42 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.navbar{
+  border-bottom:0.3px solid gray ;
+}
+.active{
+  border-bottom: 3px solid black;
+}
+.navbar-brand{
+  font-weight: 900;
+  font-size: 30px;
+}
+.bottle{
+  font-weight: bolder;
+}
+.footer{
+  color: white;
+  background: black;
+  padding: 25px;
+}
+.footer a{
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+}
+
+.footer a:hover{
+  color: #e6e1e1;
+  border-bottom: 1px solid #e6e1e1;
+}
+
+.register{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  flex-direction: column;
+}

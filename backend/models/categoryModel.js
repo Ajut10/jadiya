@@ -1,7 +1,14 @@
 const mongoose = require('mongoose')
 
 const categoryScehma = mongoose.Schema({
-    name: String,
-    description: String
+    name: {
+        type:String,
+        required: true,
+        unique: true
+    },
+    slug: {
+        type:String,
+        lowercase: true
+    }
 })
 module.exports = mongoose.model('Category', categoryScehma)

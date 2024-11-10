@@ -11,10 +11,12 @@ const mongoose = require("mongoose");
 const productsRouter = require("./routers/products");
 const usersRouter = require("./routers/users");
 const categoryRouter = require("./routers/categories");
-
+const cors = require("cors");
 // middleware
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
+app.use(cors())
+
 
 const api = process.env.API_URL;
 

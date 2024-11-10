@@ -26,19 +26,19 @@ const registerUser = async (req, res) => {
 
     // validation
     if (!name) {
-      return res.send({ error: "Name is required" });
+      return res.send({ message: "Name is required" });
     }
     if (!email) {
-      return res.send({ error: "Email is required" });
+      return res.send({ message: "Email is required" });
     }
     if (!password) {
-      return res.send({ error: "Pasword is required" });
+      return res.send({ message: "Pasword is required" });
     }
     if (!phone) {
-      return res.send({ error: "Phone is required" });
+      return res.send({ message: "Phone is required" });
     }
     if (!address) {
-      return res.send({ error: "Address is required" });
+      return res.send({ message: "Address is required" });
     }
 
     // check user
@@ -81,7 +81,7 @@ const loginUser = async(req,res)=>{
     if(!email||!password){
       return res.status(404).send(
         {
-          sucess:false,
+          success:false,
           message:"Invalid email or password"
         }
       )
@@ -96,21 +96,22 @@ const loginUser = async(req,res)=>{
     }
     const match = await comparePassword(password,user.password)
     if(!match){
-      return res.status(404).send({
-        sucess:false,
+      return res.status(200).send({
+        success:false,
         message:"Password not matched"
       })
     }
     // token
     const token = await JWT.sign({_id:user.id},process.env.JWT_SECRET,{expiresIn:"7d"})
     res.status(200).send({
-      sucess:true,
+      success:true,
       message:"login successful",
       user: {
         name:user.name,
         email:user.email,
         phone:user.phone,
-        address:user.address
+        address:user.address,
+        role:user.role
       },
       token
     })

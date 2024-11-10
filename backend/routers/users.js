@@ -12,9 +12,14 @@ const { requireSignIn, isAdmin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", getUsers);
-
-// router.get("/:id", getUser);
+// protected routes
+router.get("/user-auth", requireSignIn, (req, res) => {
+  res.status(200).send({ ok: true });
+});
+// Admin routes
+router.get("/admin-auth", requireSignIn,isAdmin, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 
 // Register
 router.post("/register", registerUser);
@@ -22,10 +27,8 @@ router.post("/register", registerUser);
 //login
 router.post("/login", loginUser);
 
-router.get("/test",requireSignIn,isAdmin,testUser)
+router.get("/test", requireSignIn, isAdmin, testUser);
 
-router.patch("/:id", updateUser);
 
-router.delete("/:id", deleteUser);
 
 module.exports = router;

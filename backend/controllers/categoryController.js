@@ -1,66 +1,115 @@
-const mongoose = require('mongoose');
-const Category = require('../models/categoryModel')
-
-const getCategories = async (req,res)=>{
-    const category = await Category.find({})
-    res.status(200).json(category)
-
-}
-
-const getCategory = async (req,res)=>{
-    const {id} = req.params
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        res.status(404).json({msg:'no such id'})
-    }
-    const category = await Category.findById(id)
-    if(!category){
-        res.status(400).json({error:"no such category"})
-    }
-    res.status(200).json(category)
-}
+const mongoose = require("mongoose");
+const Category = require("../models/categoryModel");
+const slugify = require("slugify");
 
 const createCategory = async (req, res) => {
-    const {name,description} = req.body
-    try {
-        const category = await Category.create({name,description})
-        res.status(200).json(category)
+  try {
+    const { name } = req.body;
+    if (!name) {
+      return res.status(401).send({ message: "Name is required" });
     }
-    catch(error){
-        res.status(400).json({error: error.message})
+    const existingCategory = await Category.findOne({ name });
+    if (existingCategory) {
+      return res.status(200).send({ message: "Category already exists" });
     }
-
-}
-
-
-const deleteCategory= async (req, res) => {
-    const {id} = req.params
-    if(!mongoose.Types.ObjectId.isValid(id))
-        res.status(404).json({msg:"no such id"})
-    const category = await Category.findOneAndDelete({id:id})
-    if(!category)
-        res.status(404).json({error:"no such category"})
-    res.status(200).json(category)
-}
-
+    const category = await new Category({ name, slug: slugify(name) }).save();
+    res.status(200).send({
+      success: true,
+      message: "New category created successfully",
+      category,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error,
+      message: "error in category creation",
+    });
+  }
+};
 
 const updateCategory = async (req, res) => {
-    const {id} = req.params
+  try {
+    const { name } = req.body;
+    const { id } = req.params;
+    const category = await Category.findByIdAndUpdate(
+      id,
+      { name, slug: slugify(name) },
+      { new: true },
+    );
+    res.status(200).send({
+      success: true,
+      message: "category updated successfully",
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "error while category update",
+      error,
+    });
+  }
+};
 
-    if(!mongoose.Types.ObjectId.isValid(id))
-        res.status(404).json({msg:"no such id"})
-    const category = await Category.findOneAndUpdate({_id:id})
-    if(!category){
-        res.status(404).json({error:"no such category"})
+const getCategorys = async (req, res) => {
+  try {
+    const category = await Category.find({});
+    res.status(200).send({
+      success: true,
+      message: "Category lists",
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "error while getting category",
+      error,
+    });
+  }
+};
+const getCategory = async (req, res) => {
+  try {
+    const category = await Category.findOne({ slug: req.params.slug });
+    res.status(200).send({
+      success: true,
+      message: "category",
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "error while getting category",
+      error,
+    });
+  }
+};
 
+const deleteCategory = (req, res) => {
+    try {
+        
+        const {id}= req.params
+        const category = await Category.findByIdAndDelete(id)
+        res.status(200).send({
+            success: true,
+            message: "category deleted",
+            category
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            menubar: "error while deleting category",
+            error
+        })
     }
-    res.status(200).json(category)
-}
-
-module.exports =
-{
-    getCategories,
-    getCategory,
-    createCategory,
-    deleteCategory,
-    updateCategory
-}
+    }
+    module.exports = {
+  createCategory,
+  updateCategory,
+  getCategorys,
+  getCategory,
+  deleteCategory
+};
