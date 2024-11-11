@@ -5,40 +5,43 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    slug:{
+        type: String,
+        required: true
+    },
     description:{
         type: String,
         required: true
     },
-
-    image:{
-        type:String,
-        default: ''
-    
-    },
-    images:[{
-       type: String,
-        
-    }],
     price:{
         type:Number,
-        default: 0
-    },
-    brand:{
-        type:String,
-        default:''
-        
+        required: true
     },
     category:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Category'
+        type:mongoose.ObjectId,
+        ref:'Category',
+        required: true
     },
-    countInStock:{
-        type: Number,
-        required: true,
-        min:0,
-        max:255
-    }
-})
+    quantity:{
+
+        type:Number,
+        required: true
+    },
+
+    photo:{
+        data:Buffer,
+        contentType: String,
+    
+    },
+ 
+    Shipping:{
+        type:Boolean,
+        
+        
+    },
+   
+ 
+},{timestamps:true})
 
 module.exports = mongoose.model('Product', productSchema)
 

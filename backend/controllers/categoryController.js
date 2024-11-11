@@ -86,7 +86,7 @@ const getCategory = async (req, res) => {
   }
 };
 
-const deleteCategory = (req, res) => {
+const deleteCategory = async (req, res) => {
     try {
         
         const {id}= req.params
@@ -96,6 +96,7 @@ const deleteCategory = (req, res) => {
             message: "category deleted",
             category
         })
+    
 
     } catch (error) {
         console.log(error)
